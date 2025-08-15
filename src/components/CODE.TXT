@@ -1,0 +1,714 @@
+/*
+=================================================================
+File: src/App.jsx
+- This is your main application component.
+- It imports all other components and arranges them.
+=================================================================
+*/
+import React, { useState, useRef } from 'react';
+
+// Import Components
+import Header from './components/Header';
+import Hero from './components/Hero';
+import VideoShowcase from './components/VideoShowcase';
+import Services from './components/Services';
+import Products from './components/Products';
+import Blog from './components/Blog';
+import Contact from './components/Contact';
+import Footer from './components/Footer';
+
+// Import Styles
+import './styles.css';
+
+// ---------- App Component ----------
+function App() {
+  const audioRef = useRef(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+
+  // Path to your audio file in the public folder
+  const audioSrc = "/assets/audio/welcome-audio.wav";
+
+  const togglePlay = () => {
+    if (!audioRef.current) return;
+    if (isPlaying) {
+      audioRef.current.pause();
+    } else {
+      audioRef.current.play();
+    }
+    setIsPlaying(!isPlaying);
+  };
+
+  return (
+    <div className="app-root">
+      <audio ref={audioRef} src={audioSrc} onEnded={() => setIsPlaying(false)} />
+      <Header />
+      <main>
+        <Hero onPlayAudio={togglePlay} isPlaying={isPlaying} />
+        <VideoShowcase />
+        <Services />
+        <Products />
+        <Blog />
+        <Contact />
+      </main>
+      <Footer />
+    </div>
+  );
+}
+
+export default App;
+
+
+/*
+=================================================================
+File: src/components/Header.jsx
+=================================================================
+*/
+import React from 'react';
+import { FaWhatsapp } from './Icons';
+
+const ASSETS = {
+    logo: "/assets/images/logo.png"
+};
+
+function Header() {
+  return (
+    <header className="site-header">
+      <div className="container row">
+        <div className="brand">
+          <img src={ASSETS.logo} alt="Prestige Tyres & Wheels Logo" className="logo" />
+          <div className="brand-text">
+            <h1>برستيج للإطارات والجنوط</h1>
+            <p>استيراد وتصدير الإطارات والجنوط</p>
+          </div>
+        </div>
+        <nav className="nav">
+          <a href="#services">خدماتنا</a>
+          <a href="#products">منتجاتنا</a>
+          <a href="#blog">المدونة</a>
+          <a href="#contact">تواصل معنا</a>
+        </nav>
+        <div className="header-contact">
+          <a href="https://wa.me/97142674488" target="_blank" rel="noopener noreferrer" className="btn small whatsapp-btn">
+             <FaWhatsapp /> <span>WhatsApp</span>
+          </a>
+        </div>
+      </div>
+    </header>
+  );
+}
+
+export default Header;
+
+
+/*
+=================================================================
+File: src/components/Hero.jsx
+=================================================================
+*/
+import React from 'react';
+import { FaPlay, FaPause } from './Icons';
+
+const ASSETS = {
+    heroBanner: "/assets/images/hero-banner.jpg"
+};
+
+function Hero({ onPlayAudio, isPlaying }) {
+  return (
+    <section className="hero" style={{ backgroundImage: `url(${ASSETS.heroBanner})` }}>
+      <div className="hero-overlay"></div>
+      <div className="container hero-inner">
+        <div className="hero-text">
+          <h2>قمة الأداء، فخامة الاختيار</h2>
+          <p>وجهتك الأولى للإطارات والجنوط الفاخرة في دبي. اكتشف مجموعتنا الحصرية التي تضمن لك قيادة آمنة وأداءً استثنائياً.</p>
+          <div className="hero-ctas">
+            <a className="btn primary" href="#products">تصفح المنتجات</a>
+            <button className="btn" onClick={onPlayAudio}>
+              {isPlaying ? <FaPause /> : <FaPlay />}
+              <span>{isPlaying ? 'إيقاف' : 'الرسالة الترحيبية'}</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+export default Hero;
+
+
+/*
+=================================================================
+File: src/components/VideoShowcase.jsx
+=================================================================
+*/
+import React, { useState } from 'react';
+import { FaChevronLeft, FaChevronRight } from './Icons';
+
+const videos = [
+    "/assets/videos/intro-1.mp4",
+    "/assets/videos/intro-2.mp4",
+    "/assets/videos/intro-3.mp4"
+];
+
+function VideoShowcase() {
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const videoRef = useRef(null);
+
+    const goToPrevious = () => {
+        const isFirstSlide = currentIndex === 0;
+        const newIndex = isFirstSlide ? videos.length - 1 : currentIndex - 1;
+        setCurrentIndex(newIndex);
+    };
+
+    const goToNext = () => {
+        const isLastSlide = currentIndex === videos.length - 1;
+        const newIndex = isLastSlide ? 0 : currentIndex + 1;
+        setCurrentIndex(newIndex);
+    };
+
+    useEffect(() => {
+        if(videoRef.current) {
+            videoRef.current.load();
+        }
+    }, [currentIndex]);
+
+    return (
+        <section id="showcase" className="showcase">
+            <div className="slider-container">
+                <div className="slider-arrow left" onClick={goToPrevious}><FaChevronLeft /></div>
+                <div className="slider-arrow right" onClick={goToNext}><FaChevronRight /></div>
+                <video 
+                    ref={videoRef}
+                    key={videos[currentIndex]} 
+                    className="slide-video" 
+                    autoPlay 
+                    muted 
+                    loop 
+                    playsInline
+                >
+                    <source src={videos[currentIndex]} type="video/mp4" />
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+        </section>
+    );
+}
+
+export default VideoShowcase;
+
+
+/*
+=================================================================
+File: src/components/Services.jsx
+=================================================================
+*/
+import React from 'react';
+
+const servicesData = [
+  { id: 1, title: 'تركيب احترافي', desc: 'نستخدم أحدث المعدات لتركيب إطاراتك بدقة وسرعة، مع ضمان تثبيت آمن ومحكم.' },
+  { id: 2, title: 'ترصيص وميزانية', desc: 'خدمة ترصيص وميزانية بالكمبيوتر للقضاء على الاهتزازات وضمان ثبات السيارة.' },
+  { id: 3, title: 'تعبئة نيتروجين', desc: 'حافظ على ضغط الإطارات مثالياً لفترة أطول لأداء أكثر ثباتاً في درجات الحرارة المرتفعة.' },
+  { id: 4, title: 'إصلاح ثقوب', desc: 'خدمة سريعة وموثوقة لإصلاح ثقوب الإطارات وإعادتك إلى الطريق بأمان.' },
+];
+
+function Services() {
+  return (
+    <section id="services" className="services container">
+      <h3 className="section-title"><span>خدمات تليق بسيارتك</span></h3>
+      <div className="services-grid">
+        {servicesData.map(s => (
+          <div key={s.id} className="service-card">
+            <h4>{s.title}</h4>
+            <p>{s.desc}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+export default Services;
+
+
+/*
+=================================================================
+File: src/components/Products.jsx
+=================================================================
+*/
+import React, { useState } from 'react';
+import ProductCard from './ProductCard';
+
+const ASSETS = {
+    products: {
+        farroad: "/assets/images/product-farroad.jpg",
+        duro: "/assets/images/product-duro.jpg",
+        threeA: "/assets/images/product-three-a.jpg"
+    }
+};
+
+const productsData = [
+    {id:1, name:'FARROAD', price:'اتصل للسعر', img: ASSETS.products.farroad, desc:'الأداء الرياضي الفائق والتحكم المطلق. مثالية للسيارات الرياضية والفاخرة.'},
+    {id:2, name:'DURO', price:'اتصل للسعر', img: ASSETS.products.duro, desc:'المتانة التي تدوم. مصممة لتقاوم أصعب الظروف وتوفر عمراً افتراضياً طويلاً.'},
+    {id:3, name:'THREE-A', price:'اتصل للسعر', img: ASSETS.products.threeA, desc:'الجودة الموثوقة والقيمة الذكية. توفر قيادة هادئة ومريحة لمختلف السيارات.'}
+];
+
+function Products() {
+  const [query, setQuery] = useState('');
+  const filtered = productsData.filter(p => p.name.toLowerCase().includes(query.toLowerCase()) || p.desc.toLowerCase().includes(query.toLowerCase()));
+
+  return (
+    <section id="products" className="products container">
+      <h3 className="section-title"><span>علامات تجارية نثق بها</span></h3>
+      <div className="product-search">
+        <input placeholder="ابحث باسم العلامة التجارية..." value={query} onChange={e => setQuery(e.target.value)} />
+      </div>
+      <div className="products-grid">
+        {filtered.map(p => <ProductCard key={p.id} product={p} />)}
+      </div>
+    </section>
+  );
+}
+
+export default Products;
+
+
+/*
+=================================================================
+File: src/components/ProductCard.jsx
+=================================================================
+*/
+import React from 'react';
+
+function ProductCard({ product }) {
+  return (
+    <div className="product-card">
+      <img src={product.img} alt={product.name} />
+      <div className="product-body">
+        <h4>{product.name}</h4>
+        <p className="desc">{product.desc}</p>
+        <div className="row between">
+          <strong className="price">{product.price}</strong>
+          <a className="btn small" href="tel:+97142674488">اتصل للشراء</a>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default ProductCard;
+
+
+/*
+=================================================================
+File: src/components/Blog.jsx (NEW)
+=================================================================
+*/
+import React, { useState } from 'react';
+import Modal from './Modal'; // We will create this component next
+
+const blogPosts = [
+    {
+        id: 1,
+        title: "كيف تختار الإطار المثالي لسيارتك في مناخ دبي؟",
+        snippet: "الحرارة الشديدة في دبي تضع تحدياً كبيراً على إطارات سيارتك. اختيار الإطار الصحيح ليس رفاهية، بل ضرورة لسلامتك...",
+        content: `<h3>مقدمة:</h3><p>القيادة في دبي تجربة فريدة، لكنها تضع سيارتك وإطاراتها أمام تحدٍ كبير، ألا وهو الحرارة الشديدة. اختيار الإطار الخاطئ لا يؤثر فقط على أداء السيارة، بل يعرض سلامتك للخطر. في "برستيج"، نؤمن بأن المعرفة هي مفتاح الاختيار الصحيح. إليك دليلنا لاختيار الإطار المثالي الذي يتحدى مناخ دبي.</p><h4>1. مقاومة الحرارة هي الأولوية القصوى</h4><p>يتم تصنيف قدرة الإطار على مقاومة الحرارة بثلاثة رموز: A, B, C. في مناخنا الحار، لا تقبل بأقل من الرمز (A). هذا الرمز يضمن أن الإطار مصمم ليحافظ على خصائصه وأدائه حتى في أشد أيام الصيف حرارة.</p><h4>2. تاريخ الإنتاج: عامل حاسم</h4><p>مع مرور الوقت والتعرض للحرارة، يفقد المطاط مرونته. ابحث دائماً عن "رمز DOT" على جدار الإطار. آخر أربعة أرقام تشير إلى أسبوع وسنة الإنتاج. نصيحتنا: لا تشترِ إطارات يزيد عمرها عن عام واحد.</p><h4>3. تصميم نقشة الإطار (Tread Pattern)</h4><p>نقشة الإطار هي المسؤولة عن التماسك وتصريف المياه. في دبي، معظم القيادة تكون على طرق جافة، لذا تحتاج إلى إطار يوفر أقصى تلامس مع الأسفلت. النقشات ذات الكتل الكبيرة والأخاديد المحيطية المستقيمة توفر تماسكاً ممتازاً.</p><h4>4. مؤشر السرعة والحمل</h4><p>يجب أن يتوافق مؤشر السرعة والحمل في إطارك الجديد مع مواصفات الشركة المصنعة لسيارتك. استخدام إطار بمؤشر أقل يمكن أن يكون خطيراً، خاصة على الطرق السريعة.</p><h3>خاتمة:</h3><p>اختيار الإطار المناسب استثمار في سلامتك وراحة بالك. تفضل بزيارتنا ودع خبرائنا يساعدونك على اتخاذ القرار الأمثل لسيارتك.</p>`
+    },
+    {
+        id: 2,
+        title: "النيتروجين أم الهواء العادي؟ الحقيقة الكاملة لإطارات سيارتك",
+        snippet: "هل تساءلت يوماً عن فائدة تعبئة الإطارات بالنيتروجين؟ هل هي مجرد ترف أم أن هناك فوائد حقيقية، خاصة في بيئة مثل دبي؟...",
+        content: `<h3>مقدمة:</h3><p>"هل يجب أن أملأ إطاراتي بالنيتروجين؟" - هذا سؤال يطرحه الكثير من السائقين. لإنهاء هذا الجدل، دعنا نكشف الحقيقة الكاملة.</p><h4>ما الفرق الجوهري؟</h4><p>الهواء العادي يحتوي على حوالي 78% نيتروجين و 21% أكسجين ورطوبة. تعبئة الإطارات بالنيتروجين تعني استخدام نيتروجين نقي بنسبة تتجاوز 95%، وهو جاف تماماً.</p><h4>فوائد استخدام النيتروجين:</h4><ul><li><strong>ضغط أكثر استقراراً:</strong> جزيئات النيتروجين أكبر، مما يجعل تسربها أبطأ. النتيجة؟ ضغط إطار ثابت لفترة أطول.</li><li><strong>لا رطوبة، لا تآكل:</strong> الهواء العادي يحتوي على رطوبة تتسبب في صدأ الجنوط من الداخل. النيتروجين الجاف يقضي على هذه المشكلة.</li><li><strong>عمر أطول للإطار:</strong> النيتروجين يميل إلى البقاء أبرد من الهواء العادي تحت الضغط، مما يقلل من حرارة الإطار ويساهم في إبطاء تآكله.</li></ul><h3>الحكم النهائي:</h3><p>هل يوفر النيتروجين فوائد ملموسة؟ بالتأكيد. إنه يمثل الترقية المنطقية للسائق الذي يبحث عن راحة البال والأداء الأفضل.</p>`
+    },
+    {
+        id: 3,
+        title: "5 علامات تدل على أن الوقت قد حان لتغيير إطارات سيارتك",
+        snippet: "إطارات سيارتك هي نقطة الاتصال الوحيدة بينك وبين الطريق. تجاهل حالتها يمكن أن يكون له عواقب وخيمة. لا تنتظر وقوع حادث!...",
+        content: `<h3>مقدمة:</h3><p>لا تنتظر وقوع حادث! كن سبّاقاً وتعلم قراءة العلامات التي تخبرك بأن إطاراتك قد وصلت إلى نهاية عمرها الافتراضي.</p><ol><li><strong>عمق النقشة يصل إلى الحد الأدنى:</strong> إذا أصبح سطح الإطار مستوياً مع "مؤشرات التآكل" (Tread Wear Indicators)، فقد حان وقت التغيير فوراً.</li><li><strong>ظهور تشققات أو انتفاخات:</strong> أشعة الشمس الحارقة تسرّع من شيخوخة المطاط. أي انتفاخ أو "فقاعة" يعني أن الإطار على وشك الانفجار.</li><li><strong>اهتزازات غير طبيعية أثناء القيادة:</strong> قد يكون السبب تلفاً داخلياً في الإطار أو تآكلاً غير متساوٍ.</li><li><strong>عمر الإطار يتجاوز 5 سنوات:</strong> المطاط يتحلل بمرور الوقت. استبدل الإطارات كل 5 إلى 6 سنوات كحد أقصى.</li><li><strong>ضعف واضح في الأداء:</strong> إذا زادت مسافة التوقف أو شعرت بانزلاق السيارة بسهولة، فهذا تدهور في قدرة الإطار على التماسك.</li></ol><h3>خاتمة:</h3><p>سلامتك لا تقدر بثمن. عند ملاحظة أي من هذه العلامات، لا تتردد وقم بزيارتنا لتحصل على فحص مجاني.</p>`
+    },
+];
+
+function Blog() {
+    const [selectedPost, setSelectedPost] = useState(null);
+
+    return (
+        <section id="blog" className="blog container">
+            <h3 className="section-title"><span>مقالات ونصائح</span></h3>
+            <div className="blog-grid">
+                {blogPosts.map(post => (
+                    <div key={post.id} className="blog-card">
+                        <h4>{post.title}</h4>
+                        <p>{post.snippet}</p>
+                        <button className="btn small" onClick={() => setSelectedPost(post)}>اقرأ المزيد</button>
+                    </div>
+                ))}
+            </div>
+            {selectedPost && (
+                <Modal onClose={() => setSelectedPost(null)}>
+                    <h2>{selectedPost.title}</h2>
+                    <div dangerouslySetInnerHTML={{ __html: selectedPost.content }} />
+                </Modal>
+            )}
+        </section>
+    );
+}
+
+export default Blog;
+
+
+/*
+=================================================================
+File: src/components/Modal.jsx (NEW)
+=================================================================
+*/
+import React, { useEffect } from 'react';
+
+function Modal({ onClose, children }) {
+    useEffect(() => {
+        const handleEsc = (event) => {
+           if (event.keyCode === 27) {
+            onClose();
+          }
+        };
+        window.addEventListener('keydown', handleEsc);
+    
+        return () => {
+          window.removeEventListener('keydown', handleEsc);
+        };
+    }, [onClose]);
+
+    return (
+        <div className="modal-backdrop" onClick={onClose}>
+            <div className="modal-content" onClick={e => e.stopPropagation()}>
+                <button className="modal-close" onClick={onClose}>&times;</button>
+                {children}
+            </div>
+        </div>
+    );
+}
+
+export default Modal;
+
+
+/*
+=================================================================
+File: src/components/Contact.jsx
+=================================================================
+*/
+import React, { useState } from 'react';
+
+function Contact() {
+  const [form, setForm] = useState({ name: '', phone: '', message: '' });
+  const onChange = e => setForm({ ...form, [e.target.name]: e.target.value });
+  const onSubmit = e => {
+    e.preventDefault();
+    alert('شكراً لتواصلك! سنتصل بك قريباً.');
+    setForm({ name: '', phone: '', message: '' });
+  };
+
+  return (
+    <section id="contact" className="contact container">
+      <h3 className="section-title"><span>تواصل معنا واحجز موعدك</span></h3>
+      <div className="contact-grid">
+        <form className="contact-form" onSubmit={onSubmit}>
+          <label>الاسم الكامل</label>
+          <input name="name" value={form.name} onChange={onChange} required />
+          <label>رقم الهاتف</label>
+          <input name="phone" type="tel" value={form.phone} onChange={onChange} required />
+          <label>رسالتك (اختياري)</label>
+          <textarea name="message" value={form.message} onChange={onChange} rows="4" />
+          <button className="btn primary" type="submit">أرسل الآن</button>
+        </form>
+        <div className="contact-info">
+          <h4>برستيج لتجارة الإطارات و الرنجات</h4>
+          <p><strong>العنوان:</strong> القصيص ٤، دبي، الإمارات العربية المتحدة</p>
+          <p><strong>الهاتف:</strong> <a href="tel:+97142674488">+971 4 267 4488</a> / <a href="tel:+971552698080">+971 55 269 8080</a></p>
+          <p><strong>واتساب:</strong> <a href="https://wa.me/97142674488" target="_blank" rel="noopener noreferrer">+971 4 267 4488</a></p>
+          <p><strong>البريد الإلكتروني:</strong> <a href="mailto:alsaeedt@emirates.net.ae">alsaeedt@emirates.net.ae</a></p>
+          <p><strong>ساعات العمل:</strong> 9ص - 9م (السبت - الخميس)</p>
+          <div className="map-placeholder">
+            <iframe 
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d807.0091410138059!2d55.40230238827087!3d25.29315263627815!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e5f5ea000a8571d%3A0xf43e65c35e976519!2z2YXYs9iq2LTZgdmJINin2YTYqNmE2YjZgdmKINin2YTYg9i02YjYsdmK2KfYqiDYqtmG2YXYp9iv!5e0!3m2!1sen!2sae!4v1723743034872!5m2!1sen!2sae"
+                width="100%" 
+                height="100%" 
+                style={{border:0}} 
+                allowFullScreen="" 
+                loading="lazy" 
+                referrerPolicy="no-referrer-when-downgrade">
+            </iframe>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+export default Contact;
+
+
+/*
+=================================================================
+File: src/components/Footer.jsx
+=================================================================
+*/
+import React from 'react';
+import { FaInstagram, FaFacebook, FaWhatsapp } from './Icons';
+
+function Footer() {
+  return (
+    <footer className="site-footer">
+      <div className="container row between">
+        <div>© {new Date().getFullYear()} Prestige Tyres & Wheels - جميع الحقوق محفوظة</div>
+        <div className="socials">
+            <a href="https://www.instagram.com/perstige_tyre_wheel" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><FaInstagram /></a>
+            <a href="https://www.facebook.com/prestigewheel1" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><FaFacebook /></a>
+            <a href="https://wa.me/97142674488" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><FaWhatsapp /></a>
+        </div>
+      </div>
+    </footer>
+  );
+}
+
+export default Footer;
+
+
+/*
+=================================================================
+File: src/components/Icons.jsx (NEW FILE)
+- Create this new file to hold all your SVG icons.
+=================================================================
+*/
+import React from 'react';
+
+export const FaWhatsapp = () => <svg stroke="currentColor" fill="currentColor" strokeWidth="0" viewBox="0 0 448 512" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.8 0-67.6-9.5-97.2-26.7l-7.1-4.2-67.7 17.9 18.3-65.6-4.7-7.4c-18.7-29.7-29.9-65.4-29.9-102.3 0-98.5 80.3-178.8 178.8-178.8 48.2 0 93.4 18.8 126.4 51.8 33.1 33.1 51.8 78.3 51.8 126.4 0 98.5-80.3 178.8-178.8 178.8zM223.9 111c-5.9 0-10.7 4.8-10.7 10.7v64.9c0 5.9 4.8 10.7 10.7 10.7h64.9c5.9 0 10.7-4.8 10.7-10.7s-4.8-10.7-10.7-10.7h-54.2v-54.2c0-5.9-4.8-10.7-10.7-10.7z"></path></svg>;
+export const FaInstagram = () => <svg stroke="currentColor" fill="currentColor" strokeWidth="0" viewBox="0 0 448 512" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9 26.3 26.2 58 34.4 93.9 36.2 37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"></path></svg>;
+export const FaFacebook = () => <svg stroke="currentColor" fill="currentColor" strokeWidth="0" viewBox="0 0 512 512" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M504 256C504 119 393 8 256 8S8 119 8 256c0 123.78 90.69 226.38 209.25 245V327.69h-63V256h63v-54.64c0-62.15 37-96.48 93.67-96.48 27.14 0 55.52 4.84 55.52 4.84v61h-31.28c-30.8 0-40.41 19.12-40.41 38.73V256h68.78l-11 71.69h-57.78V501C413.31 482.38 504 379.78 504 256z"></path></svg>;
+export const FaPlay = () => <svg stroke="currentColor" fill="currentColor" strokeWidth="0" viewBox="0 0 448 512" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M424.4 214.7L72.4 6.6C43.8-10.3 0 6.1 0 47.9V464c0 37.5 40.7 60.1 72.4 41.3l352-208c31.4-18.5 31.5-64.1 0-82.6z"></path></svg>;
+export const FaPause = () => <svg stroke="currentColor" fill="currentColor" strokeWidth="0" viewBox="0 0 448 512" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M144 479H48c-26.5 0-48-21.5-48-48V79c0-26.5 21.5-48 48-48h96c26.5 0 48 21.5 48 48v352c0 26.5-21.5 48-48 48zm304-48V79c0-26.5-21.5-48-48-48h-96c-26.5 0-48 21.5-48 48v352c0 26.5 21.5 48 48 48h96c26.5 0 48-21.5 48-48z"></path></svg>;
+export const FaChevronLeft = () => <svg stroke="currentColor" fill="currentColor" strokeWidth="0" viewBox="0 0 320 512" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M34.52 239.03L228.87 44.69c9.37-9.37 24.57-9.37 33.94 0l22.67 22.67c9.36 9.36 9.37 24.52.04 33.9L131.49 256l154.02 154.75c9.34 9.38 9.32 24.54-.04 33.9l-22.67 22.67c-9.37 9.37-24.57 9.37-33.94 0L34.52 272.97c-9.37-9.37-9.37-24.57 0-33.94z"></path></svg>;
+export const FaChevronRight = () => <svg stroke="currentColor" fill="currentColor" strokeWidth="0" viewBox="0 0 320 512" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"></path></svg>;
+
+
+/*
+=================================================================
+File: src/index.jsx
+- This is the entry point of your React app.
+=================================================================
+*/
+import React from 'react';
+import { createRoot } from 'react-dom/client';
+import App from './App';
+import './styles.css';
+
+createRoot(document.getElementById('root')).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
+
+
+/*
+=================================================================
+File: src/styles.css
+- Paste this entire block into your src/styles.css file.
+=================================================================
+*/
+/*
+:root {
+  --primary-gold: #D4AF37;
+  --dark-bg: #121212;
+  --dark-card: #1E1E1E;
+  --text-primary: #E0E0E0;
+  --text-secondary: #A0A0A0;
+  --white: #FFFFFF;
+  --font-main: 'Tajawal', sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-main);
+  background-color: var(--dark-bg);
+  color: var(--text-primary);
+  line-height: 1.6;
+  direction: rtl;
+}
+
+.app-root {
+  background-image: url("/assets/images/background.jpg");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+.container { max-width: 1200px; margin: 0 auto; padding: 1.5rem; }
+.row { display: flex; align-items: center; }
+.row.between { justify-content: space-between; }
+
+.site-header {
+  background: rgba(18, 18, 18, 0.8);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid #2a2a2a;
+  position: sticky; top: 0; z-index: 100; padding: 0.5rem 0;
+}
+.site-header .container { display: flex; justify-content: space-between; align-items: center; }
+.brand { display: flex; gap: 1rem; align-items: center; }
+.logo { width: 50px; height: 50px; object-fit: contain; }
+.brand-text h1 { margin: 0; font-size: 1.25rem; color: var(--white); font-weight: 700; }
+.brand-text p { margin: 0; font-size: 0.8rem; color: var(--text-secondary); }
+.nav a { margin: 0 1rem; text-decoration: none; color: var(--text-primary); transition: color 0.3s ease; font-weight: 500; }
+.nav a:hover { color: var(--primary-gold); }
+.header-contact .btn.small { font-size: 0.9rem; display: flex; align-items: center; gap: 0.5rem; }
+
+.hero {
+  position: relative; height: 70vh; display: flex; align-items: center; justify-content: center;
+  text-align: center; color: var(--white); background-size: cover; background-position: center;
+}
+.hero-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to top, rgba(18, 18, 18, 0.9), rgba(18, 18, 18, 0.4)); }
+.hero-inner { position: relative; z-index: 10; }
+.hero-text h2 { font-size: 2.8rem; margin: 0 0 1rem; font-weight: 700; text-shadow: 2px 2px 10px rgba(0,0,0,0.5); }
+.hero-text p { font-size: 1.2rem; max-width: 600px; margin: 0 auto 2rem; color: var(--text-primary); }
+.hero-ctas { display: flex; gap: 1rem; justify-content: center; align-items: center; }
+
+.showcase { padding: 0; background-color: #000; }
+.slider-container { height: 60vh; width: 100%; position: relative; background-color: #000; }
+.slide-video { width: 100%; height: 100%; object-fit: cover; }
+.slider-arrow {
+  position: absolute; top: 50%; transform: translateY(-50%); z-index: 10; cursor: pointer;
+  color: rgba(255, 255, 255, 0.7); font-size: 2.5rem; padding: 1rem;
+  transition: color 0.3s ease, background 0.3s ease;
+}
+.slider-arrow:hover { color: var(--white); background: rgba(0,0,0,0.3); }
+.slider-arrow.left { left: 1rem; }
+.slider-arrow.right { right: 1rem; }
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+  padding: 0.8rem 1.8rem; border-radius: 8px; text-decoration: none;
+  border: 2px solid var(--primary-gold); background: transparent; color: var(--primary-gold);
+  font-weight: 700; transition: all 0.3s ease; cursor: pointer; font-family: var(--font-main);
+}
+.btn.primary { background: var(--primary-gold); color: var(--dark-bg); }
+.btn:hover { transform: translateY(-3px); box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2); }
+.btn.primary:hover { background: #e6c55a; border-color: #e6c55a; }
+.btn.small { padding: 0.5rem 1rem; font-size: 0.9rem; }
+
+section { padding: 4rem 0; }
+.section-title { font-size: 2rem; margin-bottom: 2rem; text-align: center; font-weight: 700; color: var(--white); }
+.section-title span { display: inline-block; position: relative; padding-bottom: 0.5rem; }
+.section-title span::after {
+  content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
+  width: 60px; height: 3px; background-color: var(--primary-gold);
+}
+
+.services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; }
+.service-card {
+  padding: 2rem; border: 1px solid #2a2a2a; border-radius: 12px;
+  background: var(--dark-card); text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.service-card:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(0,0,0,0.3); }
+.service-card h4 { font-size: 1.2rem; color: var(--primary-gold); margin-bottom: 0.5rem; }
+.service-card p { color: var(--text-secondary); }
+
+.products { background: var(--dark-card); }
+.product-search { margin-bottom: 2rem; text-align: center; }
+.product-search input {
+  width: 100%; max-width: 500px; padding: 0.8rem; border-radius: 8px;
+  border: 1px solid #333; background: #2a2a2a; color: var(--text-primary); font-size: 1rem;
+}
+.products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
+.product-card {
+  border: 1px solid #2a2a2a; border-radius: 12px; overflow: hidden;
+  background: var(--dark-bg); transition: transform 0.3s ease;
+}
+.product-card:hover { transform: scale(1.03); }
+.product-card img { width: 100%; height: 200px; object-fit: cover; display: block; }
+.product-body { padding: 1.5rem; }
+.product-body h4 { font-size: 1.3rem; margin-bottom: 0.5rem; }
+.product-body .desc { color: var(--text-secondary); margin-bottom: 1rem; min-height: 50px; }
+.price { color: var(--primary-gold); font-size: 1.2rem; font-weight: 700; }
+
+.blog { background: var(--dark-bg); }
+.blog-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
+.blog-card {
+    background: var(--dark-card);
+    border: 1px solid #2a2a2a;
+    border-radius: 12px;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+}
+.blog-card h4 { color: var(--primary-gold); margin-bottom: 0.75rem; }
+.blog-card p { color: var(--text-secondary); flex-grow: 1; margin-bottom: 1rem; }
+
+.modal-backdrop {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex; justify-content: center; align-items: center;
+    z-index: 1000;
+}
+.modal-content {
+    background: var(--dark-card);
+    padding: 2rem;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 800px;
+    max-height: 80vh;
+    overflow-y: auto;
+    position: relative;
+    color: var(--text-primary);
+}
+.modal-close {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 2rem;
+    cursor: pointer;
+}
+.modal-content h2 { color: var(--primary-gold); margin-bottom: 1rem; }
+.modal-content h3 { color: var(--white); margin-top: 1.5rem; margin-bottom: 0.5rem; }
+.modal-content h4 { color: var(--text-primary); margin-top: 1rem; margin-bottom: 0.5rem; }
+.modal-content p, .modal-content li { color: var(--text-secondary); margin-bottom: 0.5rem; }
+.modal-content ul, .modal-content ol { padding-right: 20px; }
+
+
+.contact { background: var(--dark-card); }
+.contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; background: var(--dark-bg); padding: 2rem; border-radius: 12px; }
+.contact-form label { display: block; margin-bottom: 0.5rem; color: var(--text-secondary); }
+.contact-form input, .contact-form textarea {
+  width: 100%; padding: 0.8rem; margin-bottom: 1rem; border: 1px solid #333;
+  border-radius: 8px; background: #2a2a2a; color: var(--text-primary);
+  font-family: var(--font-main); font-size: 1rem;
+}
+.contact-info h4 { font-size: 1.5rem; color: var(--primary-gold); margin-bottom: 1rem; }
+.contact-info p { margin-bottom: 1rem; line-height: 1.8; }
+.contact-info a { color: var(--text-primary); text-decoration: none; }
+.contact-info a:hover { color: var(--primary-gold); }
+.map-placeholder { height: 220px; border-radius: 8px; overflow: hidden; }
+
+.site-footer {
+  padding: 1.5rem 0; border-top: 1px solid #2a2a2a;
+  background: var(--dark-bg); text-align: center;
+}
+.site-footer .container { flex-direction: column; gap: 1rem; }
+.socials { display: flex; gap: 1.5rem; font-size: 1.5rem; }
+.socials a { color: var(--text-secondary); transition: color 0.3s ease; }
+.socials a:hover { color: var(--primary-gold); }
+
+@media (max-width: 900px) {
+  .contact-grid { grid-template-columns: 1fr; }
+  .nav { display: none; }
+  .hero-text h2 { font-size: 2rem; }
+  .slider-container { height: 40vh; }
+}
+@media (max-width: 600px) {
+    .hero { height: 80vh; }
+    .hero-text h2 { font-size: 1.8rem; }
+    .hero-text p { font-size: 1rem; }
+    .hero-ctas { flex-direction: column; align-items: center; }
+    .contact-grid { padding: 1rem; }
+    .slider-arrow { font-size: 1.5rem; padding: 0.5rem; }
+}
+*/

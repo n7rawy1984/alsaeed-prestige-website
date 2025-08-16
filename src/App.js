@@ -4,9 +4,13 @@ import Hero from './components/Hero';
 import VideoShowcase from './components/VideoShowcase';
 import Services from './components/Services';
 import Products from './components/Products';
+import WhyUs from './components/WhyUs'; // جديد
+import Testimonials from './components/Testimonials'; // معدل
+import FAQ from './components/FAQ'; // جديد
 import Blog from './components/Blog';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
+import FeaturedVideo from './components/FeaturedVideo';
 import './styles.css';
 
 function App() {
@@ -33,9 +37,13 @@ function App() {
       <Header />
       <main>
         <Hero onPlayAudio={togglePlay} isPlaying={isPlaying} />
+        <WhyUs />
         <Services />
         <VideoShowcase />
         <Products />
+        <Testimonials />
+         <FeaturedVideo />
+        <FAQ />
         <Blog />
         <Contact />
       </main>

@@ -1,11 +1,22 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaPlay, FaPause } from './Icons';
+import CountUp from 'react-countup'; // ستحتاج إلى تثبيت هذه الحزمة
 
 function Hero({ onPlayAudio, isPlaying }) {
   const heroBannerUrl = "/assets/images/hero-banner.png";
+  const [startCounters, setStartCounters] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 100 && !startCounters) {
+        setStartCounters(true);
+      }
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [startCounters]);
 
   return (
-    // The section is now split into two parts: text content and the banner image
     <section className="hero-section">
       <div className="container">
         <div className="hero-content">
@@ -18,6 +29,27 @@ function Hero({ onPlayAudio, isPlaying }) {
                 {isPlaying ? <FaPause /> : <FaPlay />}
                 <span>{isPlaying ? 'إيقاف' : 'الرسالة الترحيبية'}</span>
               </button>
+            </div>
+            
+            <div className="achievements">
+              <div className="achievement-item">
+                <h3>
+                  {startCounters ? <CountUp end={15} duration={2} /> : '0'}+
+                </h3>
+                <p>سنوات خبرة</p>
+              </div>
+              <div className="achievement-item">
+                <h3>
+                  {startCounters ? <CountUp end={5000} duration={2} /> : '0'}+
+                </h3>
+                <p>عميل راضٍ</p>
+              </div>
+              <div className="achievement-item">
+                <h3>
+                  {startCounters ? <CountUp end={100} duration={2} /> : '0'}+
+                </h3>
+                <p>علامة تجارية</p>
+              </div>
             </div>
           </div>
         </div>

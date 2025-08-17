@@ -42,6 +42,7 @@ function VideoShowcase() {
                     key={videos[currentIndex].src} 
                     className="slide-video" 
                     autoPlay 
+                    muted
                     playsInline
                     poster={videos[currentIndex].poster}
                 >

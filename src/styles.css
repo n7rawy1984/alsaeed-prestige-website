@@ -1072,3 +1072,118 @@ body.light-mode {
   color: var(--primary-gold);
   font-weight: 700;
 } */
+ /* --- Add at the end of your styles.css file --- */
+
+/* Active Link Highlighting */
+.nav a.active {
+  color: var(--primary-gold);
+}
+
+.light-mode .nav a.active {
+  color: var(--primary-gold);
+}
+
+
+/* --- Header Right-side container --- */
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.whatsapp-btn .whatsapp-text {
+  display: inline; /* Show text by default */
+}
+
+
+/* --- Hamburger Menu Button --- */
+.hamburger-btn {
+  display: none; /* Hidden on desktop */
+  background: none;
+  border: none;
+  color: var(--text-primary);
+  font-size: 1.5rem;
+  cursor: pointer;
+  z-index: 1001;
+  padding: 0.5rem;
+}
+
+.light-mode .hamburger-btn {
+  color: var(--text-primary-light);
+}
+
+
+/* --- Mobile Navigation Menu --- */
+.nav-mobile {
+  display: none; /* Hidden by default */
+  flex-direction: column;
+  position: absolute;
+  top: 100%; /* Position below the header */
+  right: 0;
+  width: 100%;
+  background: rgba(18, 18, 18, 0.98);
+  backdrop-filter: blur(10px);
+  padding: 1rem 0;
+  border-bottom: 1px solid #2a2a2a;
+}
+
+.light-mode .nav-mobile {
+  background: rgba(255, 255, 255, 0.98);
+  border-bottom: 1px solid var(--border-light);
+}
+
+.nav-mobile a {
+  padding: 1rem 1.5rem;
+  text-align: center;
+  color: var(--text-primary);
+  text-decoration: none;
+  font-weight: 500;
+  width: 100%;
+}
+
+.light-mode .nav-mobile a {
+  color: var(--text-primary-light);
+}
+
+.nav-mobile a:hover {
+  background-color: rgba(212, 175, 55, 0.1);
+  color: var(--primary-gold);
+}
+
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 900px) { /* Adjust breakpoint as needed */
+  .nav {
+    display: none; /* Hide desktop nav */
+  }
+.header-contact {
+  display: flex;
+  align-items:center;
+  gap: 0.5rem; /* مسافة بين زر الواتساب وزر المظهر */
+}
+  .hamburger-btn, .nav-mobile {
+    display: flex; /* Show mobile nav button and menu */
+  }
+
+  /* Optionally hide WhatsApp text on smaller screens */
+  .whatsapp-btn .whatsapp-text {
+    display: none;
+  }
+}
+.feedback-message {
+  padding: 1.5rem;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.feedback-message.success {
+  background-color: rgba(30, 215, 96, 0.1);
+  border: 1px solid #1ed760;
+  color: #1ed760;
+}
+
+.feedback-message.error {
+  background-color: rgba(255, 0, 0, 0.1);
+  border: 1px solid #ff0000;
+  color: #ff0000;
+}

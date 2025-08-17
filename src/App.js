@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useLayoutEffect } from 'react';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import VideoShowcase from './components/VideoShowcase';
@@ -16,8 +16,7 @@ import './styles.css';
 function App() {
   const audioRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
-  
-  // عند تحميل الصفحة، ابحث عن الثيم المحفوظ، وإلا استخدم 'dark'
+
   const [theme, setTheme] = useState(() => {
     const savedTheme = localStorage.getItem('theme');
     return savedTheme || 'dark';
@@ -29,12 +28,38 @@ function App() {
     setTheme(prevTheme => (prevTheme === 'dark' ? 'light' : 'dark'));
   };
 
-  // هذا الكود يعمل عند كل تغيير للثيم ليقوم بتطبيقه على الصفحة وحفظه
-  useEffect(() => {
+  useLayoutEffect(() => {
     document.body.className = '';
     document.body.classList.add(`${theme}-mode`);
     localStorage.setItem('theme', theme);
   }, [theme]);
+  
+  // --- NEW: Active Link Highlighting Logic ---
+  useEffect(() => {
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav a');
+
+    const handleScroll = () => {
+      let current = '';
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        if (window.scrollY >= sectionTop - 150) {
+          current = section.getAttribute('id');
+        }
+      });
+
+      navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === `#${current}`) {
+          link.classList.add('active');
+        }
+      });
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+  // --- END NEW ---
 
   const togglePlay = () => {
     if (!audioRef.current) return;
@@ -54,16 +79,17 @@ function App() {
       <audio ref={audioRef} src={audioSrc} onEnded={() => setIsPlaying(false)} />
       <Header theme={theme} toggleTheme={toggleTheme} />
       <main>
-        <Hero onPlayAudio={togglePlay} isPlaying={isPlaying} />
-        <WhyUs />
-        <Services />
+        {/* Make sure your sections have IDs that match the nav links */}
+        <section id="hero"><Hero onPlayAudio={togglePlay} isPlaying={isPlaying} /></section>
+        <section id="why-us"><WhyUs /></section>
+        <section id="services"><Services /></section>
         <VideoShowcase />
-        <Products />
-        <Testimonials />
+        <section id="products"><Products /></section>
+        <section id="testimonials"><Testimonials /></section>
         <FeaturedVideo />
-        <FAQ />
-        <Blog />
-        <Contact />
+        <section id="faq"><FAQ /></section>
+        <section id="blog"><Blog /></section>
+        <section id="contact"><Contact /></section>
       </main>
       <Footer />
     </div>

@@ -1,48 +1,91 @@
 import React, { useState } from 'react';
 
 function Contact() {
-  const [form, setForm] = useState({ name: '', phone: '', message: '' });
-  const onChange = e => setForm({ ...form, [e.target.name]: e.target.value });
-  const onSubmit = e => {
+  const [formData, setFormData] = useState({ name: '', phone: '', message: '' });
+  const [status, setStatus] = useState('idle'); // 'idle', 'sending', 'success', 'error'
+  const [feedbackMessage, setFeedbackMessage] = useState('');
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = (e) => {
     e.preventDefault();
-    alert('شكراً لتواصلك! سنتصل بك قريباً.');
-    setForm({ name: '', phone: '', message: '' });
+    setStatus('sending');
+    setFeedbackMessage('');
+
+    // --- This is a simulation. Replace with your actual form submission logic. ---
+    setTimeout(() => {
+      // Simulate a random success or failure
+      if (Math.random() > 0.1) { // 90% chance of success
+        setStatus('success');
+        setFeedbackMessage('شكراً لك! تم استلام رسالتك بنجاح وسنتواصل معك قريباً.');
+        setFormData({ name: '', phone: '', message: '' }); // Clear form
+      } else {
+        setStatus('error');
+        setFeedbackMessage('عذراً، حدث خطأ أثناء إرسال الرسالة. الرجاء المحاولة مرة أخرى.');
+      }
+    }, 1500); // Simulate 1.5 second delay
+    // --- End of simulation ---
   };
 
   return (
-    <section id="contact" className="contact container">
-      <h3 className="section-title"><span>تواصل معنا واحجز موعدك</span></h3>
-      <div className="contact-grid">
-        <form className="contact-form" onSubmit={onSubmit}>
-          <label>الاسم الكامل</label>
-          <input name="name" value={form.name} onChange={onChange} required />
-          <label>رقم الهاتف</label>
-          <input name="phone" type="tel" value={form.phone} onChange={onChange} required />
-          <label>رسالتك (اختياري)</label>
-          <textarea name="message" value={form.message} onChange={onChange} rows="4" />
-          <button className="btn primary" type="submit">أرسل الآن</button>
-        </form>
-        <div className="contact-info">
-          <h4>برستيج لتجارة الإطارات و الرنجات</h4>
-          <p><strong>العنوان:</strong> القصيص ٤، دبي، الإمارات العربية المتحدة</p>
-          <p><strong>الهاتف:</strong> <a href="tel:+971552698080">0552698080</a></p>
-          <p><strong>واتساب / هاتف:</strong> <a href="tel:+97142674488">042674488</a></p>
-          <p><strong>البريد الإلكتروني:</strong> <a href="mailto:alsaeedt@emirates.net.ae">alsaeedt@emirates.net.ae</a></p>
-          <p><strong>ساعات العمل:</strong> 9ص - 9م (السبت - الخميس)</p>
-          <div className="map-placeholder">
-            <iframe 
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d807.0091410138059!2d55.40230238827087!3d25.29315263627815!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e5f5ea000a8571d%3A0xf43e65c35e976519!2z2YXYs9iq2LTZgdmJINin2YTYqNmE2YjZgdmKINin2YTYg9i02YjYsdmK2KfYqiDYqtmG2YXYp9iv!5e0!3m2!1sen!2sae!4v1723743034872!5m2!1sen!2sae"
-                width="100%" 
-                height="100%" 
-                style={{border:0}} 
-                allowFullScreen="" 
-                loading="lazy" 
-                referrerPolicy="no-referrer-when-downgrade">
-            </iframe>
+    <div id="contact" className="contact">
+      <div className="container">
+        <h2 className="section-title"><span>تواصل معنا</span></h2>
+        <div className="contact-grid">
+          <div className="contact-info">
+            <h4>كن على تواصل</h4>
+            <p>نحن هنا لمساعدتك. سواء كان لديك سؤال حول منتجاتنا أو كنت بحاجة إلى استشارة، فلا تتردد في الاتصال بنا.</p>
+            <p>
+              <strong>الهاتف:</strong> <a href="tel:+97142674488">+971 4 267 4488</a><br />
+              <strong>البريد الإلكتروني:</strong> <a href="mailto:info@prestigetyres.com">info@prestigetyres.com</a><br />
+              <strong>العنوان:</strong> دبي, الإمارات العربية المتحدة
+            </p>
+            <div className="map-placeholder">
+              {/* Replace with your actual Google Maps embed iframe */}
+              <iframe 
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3608.835150825391!2d55.35697681501046!3d25.24249998387537!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjXCsDE0JzMyLjAiTiA1NcKwMjEnMzMuMCJF!5e0!3m2!1sen!2sae!4v1620000000000!5m2!1sen!2sae"
+                width="100%"
+                height="100%"
+                style={{ border: 0 }}
+                allowFullScreen=""
+                loading="lazy"
+                title="Our Location"
+              ></iframe>
+            </div>
+          </div>
+
+          <div className="contact-form">
+            {status !== 'success' && status !== 'error' ? (
+              <form onSubmit={handleSubmit}>
+                <label htmlFor="name">الاسم الكامل</label>
+                <input type="text" id="name" name="name" value={formData.name} onChange={handleChange} required />
+
+                <label htmlFor="phone">رقم الهاتف</label>
+                <input type="tel" id="phone" name="phone" value={formData.phone} onChange={handleChange} required />
+
+                <label htmlFor="message">رسالتك (اختياري)</label>
+                <textarea id="message" name="message" rows="5" value={formData.message} onChange={handleChange}></textarea>
+                
+                <button type="submit" className="btn primary" disabled={status === 'sending'}>
+                  {status === 'sending' ? 'جارِ الإرسال...' : 'إرسال الرسالة'}
+                </button>
+              </form>
+            ) : (
+              <div className={`feedback-message ${status}`}>
+                <p>{feedbackMessage}</p>
+                {status === 'error' && (
+                  <button onClick={() => setStatus('idle')} className="btn">حاول مرة أخرى</button>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </div>
-    </section>
+    </div>
   );
 }
+
 export default Contact;

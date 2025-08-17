@@ -39,10 +39,12 @@ function Contact() {
             <h4>كن على تواصل</h4>
             <p>نحن هنا لمساعدتك. سواء كان لديك سؤال حول منتجاتنا أو كنت بحاجة إلى استشارة، فلا تتردد في الاتصال بنا.</p>
             <p>
-              <strong>الهاتف:</strong> <a href="tel:+97142674488">+971 4 267 4488</a><br />
-              <strong>البريد الإلكتروني:</strong> <a href="mailto:info@prestigetyres.com">info@prestigetyres.com</a><br />
-              <strong>العنوان:</strong> دبي, الإمارات العربية المتحدة
-            </p>
+  <strong>الموبايل:</strong> 
+  <a href="tel:+971552698080" style={{display: 'inline-block', direction: 'ltr',paddingRight: '52px' }}>+971 55 2698 080</a><br /><strong>الهاتف:</strong> 
+  <a href="tel:+97142674488" style={{ display: 'inline-block', direction: 'ltr',paddingRight: '70px' }}>+971 4 267 4488</a><br />
+  <strong>البريد الإلكتروني:</strong> <a href="mailto:alsaeedt@emirates.net.ae">alsaeedt@emirates.net.ae</a><br />
+  <strong>العنوان:</strong> القصيص ٤ ,دبي ,الإمارات العربية المتحدة  🇦🇪
+</p>
             <div className="map-placeholder">
               {/* Replace with your actual Google Maps embed iframe */}
               <iframe 

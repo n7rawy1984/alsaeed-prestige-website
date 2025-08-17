@@ -23,7 +23,7 @@ function Header({ theme, toggleTheme }) {
           <img src={ASSETS.logo} alt="Prestige Tyres & Wheels Logo" className="logo" />
           <div className="brand-text">
             <h1>برستيج للإطارات والجنوط</h1>
-            <p>استيراد وتتصدي</p>
+            <p>استيراد وتصدير الإطارات والجنوط</p>
           </div>
         </div>
         

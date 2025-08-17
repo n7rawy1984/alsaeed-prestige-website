@@ -34,19 +34,19 @@ function Hero({ onPlayAudio, isPlaying }) {
             <div className="achievements">
               <div className="achievement-item">
                 <h3>
-                  {startCounters ? <CountUp end={15} duration={2} /> : '0'}+
+                  {startCounters ? <CountUp end={40} duration={2} /> : '0'}+
                 </h3>
                 <p>سنوات خبرة</p>
               </div>
               <div className="achievement-item">
                 <h3>
-                  {startCounters ? <CountUp end={5000} duration={2} /> : '0'}+
+                  {startCounters ? <CountUp end={20000} duration={2} /> : '0'}+
                 </h3>
                 <p>عميل راضٍ</p>
               </div>
               <div className="achievement-item">
                 <h3>
-                  {startCounters ? <CountUp end={100} duration={2} /> : '0'}+
+                  {startCounters ? <CountUp end={500} duration={2} /> : '0'}+
                 </h3>
                 <p>علامة تجارية</p>
               </div>

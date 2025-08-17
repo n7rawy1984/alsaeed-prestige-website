@@ -1,3 +1,13 @@
+/* حل نهائي لمنع وميض الثيم عند تحميل الصفحة */
+body.no-fouc {
+  visibility: hidden;
+  opacity: 0;
+}
+
+body {
+  /* هذا السطر اختياري لكنه يجعل ظهور الصفحة ناعمًا */
+  transition: visibility 0s, opacity 0.3s linear;
+}
 @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap');
 
 :root {
@@ -8,6 +18,11 @@
   --text-secondary: #A0A0A0;
   --white: #FFFFFF;
   --font-main: 'Tajawal', sans-serif;
+    --light-bg: #F5F5F5;
+  --light-card: #FFFFFF;
+  --text-primary-light: #1E1E1E;
+  --text-secondary-light: #5e6f7e;
+  --border-light: #E0E0E0;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -837,9 +852,223 @@ section { padding: 4rem 0; }
     font-size: 1rem;
   }
 }
+body.light-mode {
+  background-color: var(--light-bg);
+  color: var(--text-primary-light);
+}
+
+.light-mode .site-header {
+  background: rgba(255, 255, 255, 0.95);
+  border-bottom-color: var(--border-light);
+}
+
+.light-mode .brand-text h1,
+.light-mode .nav a {
+  color: var(--text-primary-light);
+}
+
+.light-mode .brand-text p {
+  color: var(--text-secondary-light);
+}
+
+.light-mode .hero-text h2,
+.light-mode .section-title {
+  color: var(--text-primary-light);
+}
+
+.light-mode .hero-text p {
+  color: var(--text-secondary-light);
+}
+
+.light-mode .service-card,
+.light-mode .products,
+.light-mode .why-us,
+.light-mode .testimonials,
+.light-mode .faq,
+.light-mode .contact {
+  background: var(--light-card);
+}
+
+.light-mode .service-card,
+.light-mode .product-card,
+.light-mode .blog-card,
+.light-mode .feature-card,
+.light-mode .testimonial-card,
+.light-mode .faq-item {
+  border-color: var(--border-light);
+  background: var(--light-card);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.light-mode .service-card p,
+.light-mode .product-body .desc,
+.light-mode .blog-card p,
+.light-mode .testimonial-meta .role,
+.light-mode .faq-answer {
+  color: var(--text-secondary-light);
+}
+
+.light-mode .product-search input,
+.light-mode .contact-form input,
+.light-mode .contact-form textarea {
+  background: var(--light-bg);
+  border-color: var(--border-light);
+  color: var(--text-primary-light);
+}
+
+.light-mode .contact-grid {
+    background: var(--light-card);
+}
+
+.light-mode .site-footer {
+    background: var(--light-card);
+    border-top-color: var(--border-light);
+}
+
+.light-mode .socials a {
+    color: var(--text-secondary-light);
+}
+
+.light-mode .socials a:hover {
+    color: var(--primary-gold);
+}
+
+.light-mode .testimonial-meta h4,
+.light-mode .feature-card h4,
+.light-mode .faq-question h4 {
+    color: var(--text-primary-light);
+}
+/* --- تعديلات الهيدر --- */
+/* --- أضف هذا الكود --- */
+.header-contact {
+  display: flex;
+  align-items:center;
+  gap: 06rem; /* مسافة بين زر الواتساب وزر المظهر */
+}
+/* لجعل بقية العناصر تبتعد لليسار */
+.site-header .container {
+  justify-content: space-between;
+}
+/* تعديل خلفية قسم الفيديو في الوضع النهاري */
+.light-mode .featured-video-section {
+  background: linear-gradient(135deg, #e9e9e9 0%, #f5f5f5 100%);
+    /* margin-top: 5rem; */
+
+}
+.light-mode .featured-video-section {
+ background: linear-gradient(135deg, #e9e9e9 0%, #f5f5f5 100%);
+ margin: 2rem 0;
+ border: 8px solid #d0d0d0; /* تم التغيير هنا */
+}
+/* تعديل لون إطار الفيديو في الوضع النهاري */
+.light-mode .video-frame {
+  border-color:  #D4AF37 ; /* لون رمادي فاتح ومحايد */
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1); /* تعديل الظل ليكون أنعم */
+}
+/* تحسين وضوح خطوط قسم الفيديو في الوضع النهاري */
+.light-mode .video-caption h4 {
+  color: #1E1E1E; /* لون أسود داكن للعنوان الرئيسي */
+}
+
+.light-mode .video-caption p {
+  color: #555555; /* لون رمادي داكن للنص الفرعي */
+}
+/* إخفاء زر تشغيل الفيديو بشكل افتراضي */
+.featured-play-button {
+  opacity: 0;
+  transition: opacity 0.3s ease; /* لإضافة تأثير ظهور ناعم */
+}
+
+/* إظهار زر التشغيل عند مرور الفأرة فوق إطار الفيديو */
+.video-frame:hover .featured-play-button {
+  opacity: 1;
+}
+.light-mode .featured-video-section {
+  border: none;
+}
+/* تحسين ألوان قسم المدونة في الوضع النهاري */
+.light-mode .blog {
+  background: var(--light-bg); /* تغيير الخلفية إلى الرمادي الفاتح */
+}
+
+.light-mode .blog-card {
+  background: var(--light-card); /* إبقاء البطاقة بيضاء */
+  border: 1px solid var(--border-light); /* إضافة حدود فاتحة */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); /* إضافة ظل ناعم للبروز */
+}
+
+.light-mode .blog-card h4 {
+  color: var(--text-primary-light); /* جعل العنوان بلون داكن وواضح */
+}
+/* إزالة الهامش العلوي والتدرج اللوني من قسم الفيديو المميز */
+/* .featured-video-section {
+  margin-top: 0;
+  background: transparent;
+} */
+
+/* إزالة كل المسافات العلوية من قسم الفيديو المميز */
+/* .featured-video-section {
+  margin-top: 5rem;
+  padding-top: 0;
+  background: transparent;
+} */
+ /* إزالة المسافة السفلية من قسم آراء العملاء لرفع قسم الفيديو */
 /*
-
-add to intro hvoer
-
+  This code makes the background of the Testimonials section
+  the same light grey as the page, removing the white box.
 */
+.light-mode .testimonials {
+  background: var(--light-bg);
+}
+/* تحسين وضوح خطوط قسم التواصل في الوضع النهاري */
 
+/* 1. جعل لون النص المؤقت (placeholder) في الفورم أغمق */
+.light-mode .contact-form input::placeholder,
+.light-mode .contact-form textarea::placeholder {
+  color: #888;
+}
+
+/* 2. جعل لون أرقام الهواتف والروابط داكنًا وواضحًا */
+.light-mode .contact-info a {
+  color: var(--text-primary-light);
+}
+/* تحسين وضوح خطوط قسم التواصل في الوضع النهاري */
+
+/* 1. جعل لون النص المكتوب والنص المؤقت داكنًا وواضحًا */
+.light-mode .contact-form input,
+.light-mode .contact-form textarea {
+  color: #1E1E1E; /* A solid dark color for typed text */
+}
+
+.light-mode .contact-form input::placeholder,
+.light-mode .contact-form textarea::placeholder {
+  color: #888; /* A slightly lighter grey for the placeholder */
+}
+
+/* 2. جعل لون أرقام الهواتف والروابط داكنًا وواضحًا */
+.light-mode .contact-info a {
+  color: var(--text-primary-light);
+}
+/*
+  This code fixes the color of the form field labels
+  (like 'الاسم الكامل') in the light theme.
+*/
+.light-mode .contact-form label {
+  color: #555;
+}
+/*
+  This code adjusts the testimonial media container for the light theme,
+  making the background a light, semi-transparent overlay and the text dark.
+*/
+.light-mode .testimonial-content {
+  background: rgba(255, 255, 255, 0.8); /* Light, semi-transparent background */
+  color: var(--text-primary-light); /* Dark text for readability */
+}
+
+.light-mode .testimonial-content p {
+  color: var(--text-secondary-light); /* Slightly lighter dark grey for the quote text */
+}
+/* .nav a.active {
+  color: var(--primary-gold);
+  font-weight: 700;
+} */

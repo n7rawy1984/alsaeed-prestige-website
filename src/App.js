@@ -14,6 +14,13 @@ import Footer from './components/Footer';
 import FeaturedVideo from './components/FeaturedVideo';
 import './styles.css';
 
+// --- NEW: Define audio sources for both languages ---
+const audioSources = {
+  ar: "/assets/audio/welcome-audio.wav",       // Your existing Arabic audio file
+  en: "/assets/audio/welcome-audio-en.wav"    // The new English audio file
+};
+// --- END NEW ---
+
 function App() {
   const { i18n } = useTranslation();
   const audioRef = useRef(null);
@@ -23,8 +30,6 @@ function App() {
     const savedTheme = localStorage.getItem('theme');
     return savedTheme || 'dark';
   });
-
-  const audioSrc = "/assets/audio/welcome-audio.wav";
 
   const toggleTheme = () => {
     setTheme(prevTheme => (prevTheme === 'dark' ? 'light' : 'dark'));
@@ -36,11 +41,9 @@ function App() {
     localStorage.setItem('theme', theme);
   }, [theme]);
   
-  // Active Link Highlighting Logic
   useEffect(() => {
     const sections = document.querySelectorAll('div[id]');
     const navLinks = document.querySelectorAll('.nav a, .nav-mobile a');
-
     const handleScroll = () => {
       let current = '';
       sections.forEach(section => {
@@ -49,7 +52,6 @@ function App() {
           current = section.getAttribute('id');
         }
       });
-
       navLinks.forEach(link => {
         link.classList.remove('active');
         if (link.getAttribute('href') === `#${current}`) {
@@ -57,15 +59,19 @@ function App() {
         }
       });
     };
-
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Language Direction Logic
   useEffect(() => {
     document.documentElement.lang = i18n.language;
     document.documentElement.dir = i18n.language === 'ar' ? 'rtl' : 'ltr';
+    // Stop audio when language changes
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+      setIsPlaying(false);
+    }
   }, [i18n.language]);
 
   const togglePlay = () => {
@@ -73,7 +79,7 @@ function App() {
     if (isPlaying) {
       audioRef.current.pause();
     } else {
-      audioRef.current.play();
+      audioRef.current.play().catch(error => console.log("Audio play failed:", error));
     }
     setIsPlaying(!isPlaying);
   };
@@ -83,7 +89,15 @@ function App() {
       className="app-root" 
       style={{ backgroundImage: `url(/assets/images/background.jpg)` }}
     >
-      <audio ref={audioRef} src={audioSrc} onEnded={() => setIsPlaying(false)} />
+      {/* --- MODIFIED: Audio player now dynamically selects the language source --- */}
+      <audio 
+        ref={audioRef} 
+        src={audioSources[i18n.language]} 
+        key={i18n.language} // This key is crucial to force re-render on language change
+        onEnded={() => setIsPlaying(false)} 
+      />
+      {/* --- END MODIFIED --- */}
+
       <Header theme={theme} toggleTheme={toggleTheme} />
       <main>
         <Hero onPlayAudio={togglePlay} isPlaying={isPlaying} />

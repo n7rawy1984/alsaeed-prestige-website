@@ -1193,7 +1193,7 @@ body.light-mode {
   margin-right: -5rem; /* Space between it and other buttons */
 }
 html[dir="ltr"] .lang-switcher {
-  /* margin-right: 0; */
+  margin-right: 0;
   margin-left: -5rem;
 }
 

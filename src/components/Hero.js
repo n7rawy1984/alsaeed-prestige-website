@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FaPlay, FaPause } from './Icons';
-import CountUp from 'react-countup'; // ستحتاج إلى تثبيت هذه الحزمة
+import CountUp from 'react-countup';
 
 function Hero({ onPlayAudio, isPlaying }) {
+  const { t } = useTranslation();
   const heroBannerUrl = "/assets/images/hero-banner.png";
   const [startCounters, setStartCounters] = useState(false);
 
@@ -17,17 +19,17 @@ function Hero({ onPlayAudio, isPlaying }) {
   }, [startCounters]);
 
   return (
-    <section className="hero-section">
+    <section id="hero" className="hero-section">
       <div className="container">
         <div className="hero-content">
           <div className="hero-text">
-            <h2>قمة الأداء، فخامة الاختيار</h2>
-            <p>وجهتك الأولى للإطارات والجنوط الفاخرة في دبي. اكتشف مجموعتنا الحصرية التي تضمن لك قيادة آمنة وأداءً استثنائياً.</p>
+            <h2>{t('hero_title')}</h2>
+            <p>{t('hero_subtitle')}</p>
             <div className="hero-ctas">
-              <a className="btn primary" href="#products">تصفح المنتجات</a>
+              <a className="btn primary" href="#products">{t('hero_cta_browse')}</a>
               <button className="btn" onClick={onPlayAudio}>
                 {isPlaying ? <FaPause /> : <FaPlay />}
-                <span>{isPlaying ? 'إيقاف' : 'الرسالة الترحيبية'}</span>
+                <span>{isPlaying ? t('hero_stop') : t('hero_welcome_message')}</span>
               </button>
             </div>
             
@@ -36,19 +38,19 @@ function Hero({ onPlayAudio, isPlaying }) {
                 <h3>
                   {startCounters ? <CountUp end={40} duration={2} /> : '0'}+
                 </h3>
-                <p>سنوات خبرة</p>
+                <p>{t('hero_experience')}</p>
               </div>
               <div className="achievement-item">
                 <h3>
                   {startCounters ? <CountUp end={20000} duration={2} /> : '0'}+
                 </h3>
-                <p>عميل راضٍ</p>
+                <p>{t('hero_satisfied_client')}</p>
               </div>
               <div className="achievement-item">
                 <h3>
                   {startCounters ? <CountUp end={500} duration={2} /> : '0'}+
                 </h3>
-                <p>علامة تجارية</p>
+                <p>{t('hero_brand')}</p>
               </div>
             </div>
           </div>

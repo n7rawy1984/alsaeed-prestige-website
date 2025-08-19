@@ -1,19 +1,15 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FaChevronDown, FaChevronUp } from './Icons';
 
-const faqs = [
-  {
-    question: 'كيف أعرف أن الإطار يحتاج للاستبدال؟',
-    answer: 'هناك عدة علامات منها: وصول عمق النقشة إلى 1.6 مم، ظهور تشققات جانبية، تآكل غير منتظم، أو عند مرور 5 سنوات من تاريخ الإنتاج.'
-  },
-  {
-    question: 'ما الفرق بين الإطارات الصيفية والشتوية؟',
-    answer: 'الإطارات الصيفية مصممة لتحمل الحرارة العالية وتوفر تماسكاً أفضل على الطرق الجافة، بينما الشتوية تحتوي على أخاديد خاصة للتماسك على الثلج والجليد.'
-  }
-];
-
 function FAQ() {
+  const { t } = useTranslation();
   const [activeIndex, setActiveIndex] = useState(null);
+
+  const faqs = [
+    { question: t('faq_1_q'), answer: t('faq_1_a') },
+    { question: t('faq_2_q'), answer: t('faq_2_a') }
+  ];
 
   const toggleFAQ = index => {
     setActiveIndex(activeIndex === index ? null : index);
@@ -21,7 +17,7 @@ function FAQ() {
 
   return (
     <section id="faq" className="faq container">
-      <h3 className="section-title"><span>أسئلة شائعة</span></h3>
+      <h3 className="section-title"><span>{t('faq_title')}</span></h3>
       <div className="faq-list">
         {faqs.map((faq, index) => (
           <div key={index} className="faq-item">

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import ProductCard from './ProductCard';
 
 const ASSETS = {
@@ -9,21 +10,23 @@ const ASSETS = {
     }
 };
 
-const productsData = [
-    {id:1, name:'FARROAD', price:'اتصل للسعر', img: ASSETS.products.farroad, desc:'الأداء الرياضي الفائق والتحكم المطلق. مثالية للسيارات الرياضية والفاخرة.'},
-    {id:2, name:'DURO', price:'اتصل للسعر', img: ASSETS.products.duro, desc:'المتانة التي تدوم. مصممة لتقاوم أصعب الظروف وتوفر عمراً افتراضياً طويلاً.'},
-    {id:3, name:'THREE-A', price:'اتصل للسعر', img: ASSETS.products.threeA, desc:'الجودة الموثوقة والقيمة الذكية. توفر قيادة هادئة ومريحة لمختلف السيارات.'}
-];
-
 function Products() {
+  const { t } = useTranslation();
   const [query, setQuery] = useState('');
-  const filtered = productsData.filter(p => p.name.toLowerCase().includes(query.toLowerCase()) || p.desc.toLowerCase().includes(query.toLowerCase()));
+
+  const productsData = [
+    {id:1, name:'FARROAD', price: t('product_price'), img: ASSETS.products.farroad, desc: t('product_farroad_desc')},
+    {id:2, name:'DURO', price: t('product_price'), img: ASSETS.products.duro, desc: t('product_duro_desc')},
+    {id:3, name:'THREE-A', price: t('product_price'), img: ASSETS.products.threeA, desc: t('product_threea_desc')}
+  ];
+
+  const filtered = productsData.filter(p => p.name.toLowerCase().includes(query.toLowerCase()));
 
   return (
     <section id="products" className="products container">
-      <h3 className="section-title"><span>علامات تجارية نثق بها</span></h3>
+      <h3 className="section-title"><span>{t('products_title')}</span></h3>
       <div className="product-search">
-        <input placeholder="ابحث باسم العلامة التجارية..." value={query} onChange={e => setQuery(e.target.value)} />
+        <input placeholder={t('product_search_placeholder')} value={query} onChange={e => setQuery(e.target.value)} />
       </div>
       <div className="products-grid">
         {filtered.map(p => <ProductCard key={p.id} product={p} />)}

@@ -1,39 +1,17 @@
 import React, { useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FaQuoteRight, FaPlay, FaPause } from './Icons';
 
-const testimonials = [
-  {
-    id: 1,
-    name: 'سالم مبارك',
-    role: 'مالك سيارة رينج روفر',
-    content: 'أفضل خدمة في دبي، فريق محترف ومنتجات أصلية بأسعار مناسبة.',
-    rating: 5,
-    video: "/assets/videos/testimonial1.mp4",
-    poster: "/assets/images/testimonial1-poster.jpg"
-  },
-  {
-    id: 2,
-    name: 'سهيل جاسم',
-    role: 'مالكة سيارة مرسيدس',
-    content: 'نصيحتهم ساعدتني في اختيار الإطار المناسب لسيارتي، شكراً لكم!',
-    rating: 4,
-    video: "/assets/videos/testimonial2.mp4",
-    poster: "/assets/images/testimonial2-poster.jpg"
-  },
-  {
-    id: 3,
-    name: 'سلطان عبدالله',
-    role: 'مالك سيارة بورش',
-    content: 'الخدمة سريعة والتركيب دقيق، أنصح الجميع بتجربة خدماتهم.',
-    rating: 5,
-    video: "/assets/videos/testimonial3.mp4",
-    poster: "/assets/images/testimonial3-poster.jpg"
-  }
-];
-
 function Testimonials() {
+  const { t } = useTranslation();
   const videoRefs = useRef([]);
   const [playingIndex, setPlayingIndex] = useState(null);
+
+  const testimonials = [
+    { id: 1, name: t('testimonial_1_name'), role: t('testimonial_1_role'), content: t('testimonial_1_content'), rating: 5, video: "/assets/videos/testimonial1.mp4", poster: "/assets/images/testimonial1-poster.jpg" },
+    { id: 2, name: t('testimonial_2_name'), role: t('testimonial_2_role'), content: t('testimonial_2_content'), rating: 4, video: "/assets/videos/testimonial2.mp4", poster: "/assets/images/testimonial2-poster.jpg" },
+    { id: 3, name: t('testimonial_3_name'), role: t('testimonial_3_role'), content: t('testimonial_3_content'), rating: 5, video: "/assets/videos/testimonial3.mp4", poster: "/assets/images/testimonial3-poster.jpg" }
+  ];
 
   const handleVideoPlay = (index) => {
     videoRefs.current.forEach((video, i) => {
@@ -58,26 +36,18 @@ function Testimonials() {
   return (
     <section id="testimonials" className="testimonials">
       <div className="container">
-        <h3 className="section-title"><span>آراء عملائنا</span></h3>
+        <h3 className="section-title"><span>{t('testimonials_title')}</span></h3>
         <div className="testimonials-grid">
           {testimonials.map((testimonial, index) => (
             <div key={testimonial.id} className="testimonial-card">
               <div className="media-container">
                 {testimonial.video && (
                   <div className="video-wrapper">
-                    <video
-                      ref={el => videoRefs.current[index] = el}
-                      onPlay={() => handleVideoPlay(index)}
-                      poster={testimonial.poster}
-                      className="testimonial-video"
-                    >
+                    <video ref={el => videoRefs.current[index] = el} onPlay={() => handleVideoPlay(index)} poster={testimonial.poster} className="testimonial-video" playsInline>
                       <source src={testimonial.video} type="video/mp4" />
                       Your browser does not support the video tag.
                     </video>
-                    <button 
-                      className="video-control"
-                      onClick={() => togglePlayPause(index)}
-                    >
+                    <button className="video-control" onClick={() => togglePlayPause(index)}>
                       {playingIndex === index ? <FaPause /> : <FaPlay />}
                     </button>
                   </div>

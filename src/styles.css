@@ -1187,3 +1187,34 @@ body.light-mode {
   border: 1px solid #ff0000;
   color: #ff0000;
 }
+/* --- Language Switcher Button --- */
+.lang-switcher {
+  padding: 0.4rem 0.8rem;
+  margin-right: -5rem; /* Space between it and other buttons */
+}
+html[dir="ltr"] .lang-switcher {
+  margin-right: 0;
+  margin-left: -5rem;
+}
+
+
+/* --- LTR Adjustments --- */
+html[dir="ltr"] body {
+  direction: ltr;
+}
+
+/* Re-align header elements for LTR */
+html[dir="ltr"] .site-header .container {
+  flex-direction: row;
+}
+html[dir="ltr"] .brand-text {
+  text-align: left;
+}
+html[dir="ltr"] .nav-mobile {
+  left: 0;
+  right: auto;
+}
+html[dir="ltr"] .contact-info a[style] {
+  padding-right: 0 !important;
+  padding-left: 3px !important; /* Adjust alignment for LTR */
+}

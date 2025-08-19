@@ -1,7 +1,9 @@
 import React, { useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FaPlay, FaPause } from './Icons';
 
 function FeaturedVideo() {
+  const { t } = useTranslation();
   const videoRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
@@ -25,7 +27,7 @@ function FeaturedVideo() {
   return (
     <section className="featured-video-section">
       <div className="container">
-        <h3 className="section-title"><span>فيديو مميز</span></h3>
+        <h3 className="section-title"><span>{t('featured_video_title')}</span></h3>
         <div 
           className="featured-video-container"
           onMouseEnter={() => setIsHovered(true)}
@@ -47,15 +49,15 @@ function FeaturedVideo() {
               <button 
                 className="featured-play-button"
                 onClick={togglePlayPause}
-                aria-label={isPlaying ? 'إيقاف' : 'تشغيل'}
+                aria-label={isPlaying ? t('video_pause_aria') : t('video_play_aria')}
               >
                 {isPlaying ? <FaPause /> : <FaPlay />}
               </button>
             )}
           </div>
           <div className="video-caption">
-            <h4>تجربة عملائنا مع برستيج</h4>
-            <p>شاهد كيف غيرنا تجربة صيانة الإطارات لعملائنا</p>
+            <h4>{t('featured_video_caption_title')}</h4>
+            <p>{t('featured_video_caption_desc')}</p>
           </div>
         </div>
       </div>

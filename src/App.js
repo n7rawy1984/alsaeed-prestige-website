@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect, useLayoutEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import VideoShowcase from './components/VideoShowcase';
@@ -14,6 +15,7 @@ import FeaturedVideo from './components/FeaturedVideo';
 import './styles.css';
 
 function App() {
+  const { i18n } = useTranslation();
   const audioRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
 
@@ -34,10 +36,10 @@ function App() {
     localStorage.setItem('theme', theme);
   }, [theme]);
   
-  // --- NEW: Active Link Highlighting Logic ---
+  // Active Link Highlighting Logic
   useEffect(() => {
-    const sections = document.querySelectorAll('section[id]');
-    const navLinks = document.querySelectorAll('.nav a');
+    const sections = document.querySelectorAll('div[id]');
+    const navLinks = document.querySelectorAll('.nav a, .nav-mobile a');
 
     const handleScroll = () => {
       let current = '';
@@ -59,7 +61,12 @@ function App() {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-  // --- END NEW ---
+
+  // Language Direction Logic
+  useEffect(() => {
+    document.documentElement.lang = i18n.language;
+    document.documentElement.dir = i18n.language === 'ar' ? 'rtl' : 'ltr';
+  }, [i18n.language]);
 
   const togglePlay = () => {
     if (!audioRef.current) return;
@@ -79,17 +86,16 @@ function App() {
       <audio ref={audioRef} src={audioSrc} onEnded={() => setIsPlaying(false)} />
       <Header theme={theme} toggleTheme={toggleTheme} />
       <main>
-        {/* Make sure your sections have IDs that match the nav links */}
-        <section id="hero"><Hero onPlayAudio={togglePlay} isPlaying={isPlaying} /></section>
-        <section id="why-us"><WhyUs /></section>
-        <section id="services"><Services /></section>
+        <Hero onPlayAudio={togglePlay} isPlaying={isPlaying} />
+        <WhyUs />
+        <Services />
         <VideoShowcase />
-        <section id="products"><Products /></section>
-        <section id="testimonials"><Testimonials /></section>
+        <Products />
+        <Testimonials />
         <FeaturedVideo />
-        <section id="faq"><FAQ /></section>
-        <section id="blog"><Blog /></section>
-        <section id="contact"><Contact /></section>
+        <FAQ />
+        <Blog />
+        <Contact />
       </main>
       <Footer />
     </div>

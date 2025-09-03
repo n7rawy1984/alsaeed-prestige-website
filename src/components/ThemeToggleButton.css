@@ -11,7 +11,6 @@
   cursor: pointer;
   font-size: 1.2rem;
   transition: all 0.3s ease;
-  /* margin-left: -7rem; */
 }
 
 .theme-toggle-btn:hover {
@@ -20,5 +19,14 @@
 }
 
 .light-mode .theme-toggle-btn:hover {
-    color: var(--light-bg);
+  color: var(--light-bg);
+}
+
+/* --- تحسين الموبايل --- */
+@media (max-width: 768px) {
+  .theme-toggle-btn {
+    width: 30px;
+    height: 30px;
+    font-size: 1rem;
+  }
 }
